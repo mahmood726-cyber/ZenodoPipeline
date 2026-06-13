@@ -3,11 +3,11 @@
 ZenodoPipeline: Automated Zenodo DOI publisher for research repositories.
 
 Usage:
-    python zenodo_publish.py --project C:\\Models\\Asa\\ --sandbox --dry-run
-    python zenodo_publish.py --project C:\\Models\\Asa\\ --sandbox
-    python zenodo_publish.py --project C:\\Models\\Asa\\ --publish
-    python zenodo_publish.py --batch --index C:\\ProjectIndex\\INDEX.md --sandbox --dry-run
-    python zenodo_publish.py --batch --index C:\\ProjectIndex\\INDEX.md --sandbox --status SUBMISSION-READY
+    python zenodo_publish.py --project /path/to/project --sandbox --dry-run
+    python zenodo_publish.py --project /path/to/project --sandbox
+    python zenodo_publish.py --project /path/to/project --publish
+    python zenodo_publish.py --batch --index /path/to/INDEX.md --sandbox --dry-run
+    python zenodo_publish.py --batch --index /path/to/INDEX.md --sandbox --status SUBMISSION-READY
 
 Environment:
     ZENODO_TOKEN: API token for production (required for actual upload)
@@ -745,7 +745,8 @@ def dry_run_report(project_dir, verbose=False):
     zenodo_meta = generate_zenodo_json(metadata)
 
     print(f"  Title:       {metadata['title']}")
-    print(f"  Description: {metadata['description'][:100]}...")
+    desc = metadata['description']
+    print(f"  Description: {desc[:100]}{'...' if len(desc) > 100 else ''}")
     print(f"  License:     {metadata['license']}")
     print(f"  Authors:     {', '.join(a['name'] for a in metadata['authors'])}")
     print(f"  Keywords:    {', '.join(metadata['keywords'])}")
@@ -754,7 +755,8 @@ def dry_run_report(project_dir, verbose=False):
     print(f"  Test files:  {metadata['stats']['test_files']}")
 
     if metadata["e156_body"]:
-        print(f"  E156 body:   {metadata['e156_body'][:80]}...")
+        body = metadata["e156_body"]
+        print(f"  E156 body:   {body[:80]}{'...' if len(body) > 80 else ''}")
     if metadata["e156_date"]:
         print(f"  E156 date:   {metadata['e156_date']}")
 
@@ -821,8 +823,8 @@ def build_parser():
     group.add_argument("--project", type=str, help="Single project directory")
     group.add_argument("--batch", action="store_true", help="Batch mode: process from INDEX.md")
 
-    parser.add_argument("--index", type=str, default=r"C:\ProjectIndex\INDEX.md",
-                        help="Path to INDEX.md (with --batch)")
+    parser.add_argument("--index", type=str, default=None,
+                        help="Path to INDEX.md (required with --batch)")
     parser.add_argument("--status", type=str, default="SUBMISSION-READY",
                         help="Filter by status (with --batch, default: SUBMISSION-READY)")
     parser.add_argument("--sandbox", action="store_true", default=True,
@@ -845,6 +847,9 @@ def main():
     sandbox = not args.publish
 
     if args.batch:
+        if not args.index:
+            print("ERROR: --index is required with --batch")
+            sys.exit(1)
         summary = batch_process(
             index_path=args.index,
             status_filter=args.status,

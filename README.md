@@ -23,21 +23,21 @@ Automated Zenodo DOI publisher for research repositories. Scans project director
 
 ```bash
 # Dry-run: see what would be uploaded (no token needed)
-python zenodo_publish.py --project C:\Models\Asa\ --dry-run
+python zenodo_publish.py --project /path/to/project --dry-run
 
 # Upload to sandbox (requires ZENODO_SANDBOX_TOKEN)
-python zenodo_publish.py --project C:\Models\Asa\ --sandbox
+python zenodo_publish.py --project /path/to/project --sandbox
 
 # Publish to production and mint DOI (requires ZENODO_TOKEN)
-python zenodo_publish.py --project C:\Models\Asa\ --publish
+python zenodo_publish.py --project /path/to/project --publish
 
 # Batch: process all SUBMISSION-READY projects
-python zenodo_publish.py --batch --index C:\ProjectIndex\INDEX.md --dry-run
-python zenodo_publish.py --batch --index C:\ProjectIndex\INDEX.md --sandbox
-python zenodo_publish.py --batch --status SUBMISSION-READY --publish
+python zenodo_publish.py --batch --index /path/to/INDEX.md --dry-run
+python zenodo_publish.py --batch --index /path/to/INDEX.md --sandbox
+python zenodo_publish.py --batch --index /path/to/INDEX.md --status SUBMISSION-READY --publish
 
 # Verbose output
-python zenodo_publish.py --project C:\Models\Asa\ --dry-run --verbose
+python zenodo_publish.py --project /path/to/project --dry-run --verbose
 ```
 
 ## Environment Variables
@@ -55,7 +55,7 @@ Get tokens at: https://zenodo.org/account/settings/applications/ (or sandbox equ
 |----------|-------------|
 | `--project PATH` | Single project directory |
 | `--batch` | Process multiple projects from INDEX.md |
-| `--index PATH` | Path to INDEX.md (default: `C:\ProjectIndex\INDEX.md`) |
+| `--index PATH` | Path to INDEX.md (required with `--batch`) |
 | `--status STATUS` | Filter by status in batch mode (default: `SUBMISSION-READY`) |
 | `--sandbox` | Use sandbox.zenodo.org (default) |
 | `--publish` | Use production zenodo.org and publish for real DOI |
