@@ -1,0 +1,24 @@
+{
+  "checks": {
+    "analysis_rerun": "not-run",
+    "citation_cascade": "pass",
+    "claim_language": "pass",
+    "code_runs": "not-run",
+    "dashboard_match": "not-run",
+    "data_file_present": "not-run",
+    "denominator_logic": "pass",
+    "external_review": "not-run"
+  },
+  "evidence": {
+    "overmind_bundle": "",
+    "stuck_failures": "F:\\Models\\ZenodoPipeline\\STUCK_FAILURES.jsonl"
+  },
+  "issued_at": "2026-05-25T09:39:14Z",
+  "issued_by": "build_assurance_jsons.py",
+  "local_path": "F:\\Models\\ZenodoPipeline",
+  "project_name": "ZenodoPipeline",
+  "tier": "none",
+  "tier_rule": "bronze = citation_cascade != fail AND data_file_present == pass AND code_runs in (pass, not-run); silver = + dashboard_match == pass AND claim_language == pass; gold = + analysis_rerun == pass AND external_review == pass",
+  "version": 1,
+  "workbook_num": 400
+}
